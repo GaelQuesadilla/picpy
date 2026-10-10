@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "picpy"
+version = "0.0.0"
+requires-python = ">=3.11"
+dependencies = ["pillow", "numpy", "ttkbootstrap", "loguru"]
+
+authors = [{ name = "Gael Gonzalez Mendez", email = "gaelglz032@gmail.com" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+
+[project.optional-dependencies]
+dev = ["mypy", "pytest"]
+
+[project.urls]
+repository = "https://github.com/GaelQuesadilla/picpy"
+
+[project.gui-scripts]
+picpy = "picpy.__main__:main"
