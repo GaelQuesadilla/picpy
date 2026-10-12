@@ -91,7 +91,7 @@ class ImageModel:
         self._original_image = self._history[0].copy()
 
     def _push_state(self, image_array: np.ndarray):
-        self._history.append(self._to_float32(image_array))
+        self._history.appendleft(self._to_float32(image_array))
         self.notify_listeners()
 
     @staticmethod
@@ -174,3 +174,23 @@ class ImageModel:
             return None
 
         return ImageTk.PhotoImage(current)
+
+    def apply_operation(self, operation: Callable[[np.ndarray], np.ndarray], *args, **kwargs) -> None:
+        """Aplica una operación a la imagen y actualiza su estado
+
+        Parameters
+        ----------
+        operation : Callable[[np.ndarray], np.ndarray
+            Función a ejecutar sobre la matriz de datos
+
+        Raises
+        ------
+        RuntimeError
+            Cuando no hay ninguna imagen cargada
+        """
+        if self.current_array is None:
+            raise RuntimeError("No hay ninguna imagen cargada")
+
+        result = operation(self.current_array, *args, **kwargs)
+
+        self._push_state(result)
