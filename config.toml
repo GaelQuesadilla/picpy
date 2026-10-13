@@ -1,2 +1,3 @@
 [GUI]
-theme = "nord-dark"
+theme = "nord"
+mode = "dark"

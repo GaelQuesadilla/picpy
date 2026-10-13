@@ -2,7 +2,7 @@ import tomllib
 from pathlib import Path
 
 base = Path.cwd()
-
+assets = base / "src" / "picpy" / "assets"
 
 with open(base / "config.toml", "rb") as config_file:
     config = tomllib.load(config_file)
