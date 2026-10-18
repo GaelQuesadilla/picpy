@@ -1,9 +1,12 @@
 from PIL import Image, ImageTk
 import numpy as np
 from pathlib import Path
-from typing import Optional, Deque, Callable, List
+from typing import Optional, Deque, Callable, List, Tuple
 from collections import deque
-from concurrent.futures import ThreadPoolExecutor
+from picpy.utils.logger import logger
+
+
+def default_listener(): return logger.debug("Listener activado")
 
 
 class ImageModel:
@@ -33,6 +36,7 @@ class ImageModel:
         self._history: Deque[np.ndarray] = deque(maxlen=5)
 
         self._listeners: List[Callable[[], None]] = []
+        self.add_listener(default_listener)
 
     @property
     def has_image(self) -> bool:
@@ -76,15 +80,20 @@ class ImageModel:
         for listener in self._listeners:
             listener()
 
-    def load_image(self, path: Path):
+    def load_image(self, path: Path | str):
         """Carga una imagen al modelo y la establece como valor inicial
+
 
         Parameters
         ----------
-        path : Path
+        path : Path | str
             Ruta de la imagen a cargar
         """
-        image = Image.open(path.absolute())
+
+        if isinstance(path, Path):
+            path = path.absolute()
+
+        image = Image.open(path)
         image_array = np.asarray(image.convert("RGB"))
         self._history.clear()
         self._push_state(image_array)
@@ -148,32 +157,52 @@ class ImageModel:
         """
         return np.clip(array, 0.0, 1.0)
 
-    def get_current_as_pil(self) -> Image.Image | None:
+    def get_current_as_pil(self, size: Tuple[int, int] | None = None) -> Image.Image | None:
         """Convierte la última imagen del historial en un objeto PIL
+
+        Parameters
+        ----------
+        size : Tuple[int, int] | None, optional
+            El tamaño de la nueva imagen, por defecto None
 
         Returns
         -------
         Image.Image | None
             La imagen PIL
         """
-        if self.current_array is None:
+        array = self.current_array
+        if array is None:
+            logger.warning("No hay ninguna imagen cargada")
             return None
-        pil_array = self._to_uint8(self.current_array)
-        return Image.fromarray(pil_array)
 
-    def get_current_as_tk(self) -> ImageTk.PhotoImage | None:
+        array = self._normalize(array)
+        pil_array = self._to_uint8(array)
+        image = Image.fromarray(pil_array)
+        if not size is None:
+            image = image.resize(size)
+
+        return image
+
+    def get_current_as_tk(self, size: Tuple[int, int] | None = None) -> ImageTk.PhotoImage | None:
         """Convierte la última imagen del historial en un objeto compatible con TK
+
+        Parameters
+        ----------
+        size : Tuple[int, int] | None, optional
+            El tamaño de la nueva imagen, por defecto None
 
         Returns
         -------
-        ImageTk.PhotoImage | None
+        Image.Image | None
             La Imagen compatible con TK
         """
-        current = self.get_current_as_pil()
-        if current is None:
+        image = self.get_current_as_pil(size=size)
+        if image is None:
+            logger.warning("No hay ninguna imagen cargada")
             return None
+        image_tk = ImageTk.PhotoImage(image=image)
 
-        return ImageTk.PhotoImage(current)
+        return image_tk
 
     def apply_operation(self, operation: Callable[[np.ndarray], np.ndarray], *args, **kwargs) -> None:
         """Aplica una operación a la imagen y actualiza su estado

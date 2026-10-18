@@ -1,3 +1,10 @@
 [GUI]
 theme = "nord"
 mode = "dark"
+
+image_placeholder = "src/picpy/assets/image_placeholder.png"
+image_placeholder64 = "src/picpy/assets/image_placeholder64.png"
+image_placeholder32 = "src/picpy/assets/image_placeholder32.png"
+
+[test]
+test_image = "src/test/images/lena.png"

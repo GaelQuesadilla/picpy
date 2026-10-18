@@ -7,7 +7,7 @@ import ttkbootstrap as ttk
 
 
 class Window(ttk.Window):
-    def __init__(self) -> None:
+    def __init__(self, *args, **kwargs) -> None:
         phi = (1 + sqrt(5))/2
 
         theme = config["GUI"]["theme"]
@@ -21,7 +21,7 @@ class Window(ttk.Window):
         def on_close(): logger.info("Cerrando ventana principal")
 
         super().__init__(title, light_theme=light_theme, dark_theme=dark_theme, iconphoto=iconphoto, size=size,
-                         minsize=minsize,  resizable=resizable, on_close=on_close)
+                         minsize=minsize,  resizable=resizable, on_close=on_close, *args, **kwargs)
 
         self.theme_mode = config["GUI"]["mode"]
 
