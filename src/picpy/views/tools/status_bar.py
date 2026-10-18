@@ -9,7 +9,7 @@ from typing import Tuple
 class StatusBar(ttk.Frame):
     def __init__(self, master: Misc, image_metadata: ImageMetadata, padding: int | Tuple[int, int] = 5, *args, **kwargs) -> None:
         self.image_metadata = image_metadata
-        super().__init__(master, padding=5, *args, **kwargs)
+        super().__init__(master, padding=padding, *args, **kwargs)
 
         self._build_ui()
 
