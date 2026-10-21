@@ -1,7 +1,8 @@
 from tkinter import Misc
-from typing import Any, Callable
+from typing import Any, Callable, Tuple
 from picpy.utils.logger import logger
 from picpy.models.ImageModel import ImageModel
+from PIL import Image, ImageTk
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as c
 from picpy.utils.config import config
@@ -9,12 +10,12 @@ from picpy.utils.config import config
 
 class TkImage(ttk.Canvas):
     def __init__(self, master: Misc, model: ImageModel | None = None, on_click: Callable[[Any], None] | None = None, *args, **kwargs):
-
+        self.image_size = (None, None)
         self.model = model or ImageModel()
         self.model.add_listener(self._update_image)
         self.on_click = on_click
 
-        self.photo = self.model.get_current_as_tk()
+        self.photo = self.model.get_current_as_pil()
 
         super().__init__(master, *args, **kwargs)
         self._build_ui()
@@ -25,14 +26,30 @@ class TkImage(ttk.Canvas):
         self.bind("<Button-1>", self.on_click)
 
     def _display_image(self) -> None:
-        if self.photo is None:
+        image = self.model.get_current_as_pil()
+        if image is None:
             logger.warning("No hay ninguna imagen disponible")
             return
+        scale = self._scale_for(image.size)
+        if scale != 1:
+            image = image.resize(
+                (round(image.width * scale), round(image.height * scale)))
 
+        self.photo = ImageTk.PhotoImage(image)
+        self.configure(height=image.height)
+        self.delete("all")
         self.create_image(0, 0, image=self.photo, anchor=c.NW)
 
+    def _scale_for(self, image_size: Tuple[int, int]) -> float:
+        ratios = [
+            target / current
+            for target, current in zip(self.image_size, image_size)
+            if target is not None
+        ]
+        return min(ratios, default=1.0)
+
     def _update_image(self) -> None:
-        self.photo = self.model.get_current_as_tk()
+        self.photo = self.model.get_current_as_pil()
         self._display_image()
 
 
