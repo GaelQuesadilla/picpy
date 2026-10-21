@@ -9,7 +9,7 @@ from picpy.utils.config import config
 
 
 class ToolImageButton(ToolButton):
-    def __init__(self, master: Misc, icon_path: Path | str, action: str, description: str | None = None, padding: int | Tuple[int, int] = 5, size: Tuple[int, int] = (30, 30), *args, **kwargs):
+    def __init__(self, master: Misc, icon_path: Path | str, action: str, description: str | None = None, padding: int | Tuple[int, int] = 5, size: Tuple[int, int] = (35, 35), *args, **kwargs):
         image = Image.open(icon_path).resize(size=size)
         icon = PhotoImage(image)
 

@@ -21,7 +21,7 @@ class ToolIconButton(ToolButton):
     def icon_name(self, value: str):
         self._icon_name = value
         self.icon = MaterialIcon(
-            self.icon_name, size=20, color=self._icon_color)
+            self.icon_name, size=35, color=self._icon_color)
 
     @property
     def _icon_color(self):
