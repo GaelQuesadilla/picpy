@@ -8,3 +8,7 @@ image_placeholder32 = "src/picpy/assets/image_placeholder32.png"
 
 [test]
 test_image = "src/test/images/lena.png"
+
+
+[assets]
+path = "src/picpy/assets/"
