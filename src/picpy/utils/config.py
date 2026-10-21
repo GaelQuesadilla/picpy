@@ -12,6 +12,11 @@ with open(base / "pyproject.toml", "rb") as project_file:
     project = tomllib.load(project_file)
 
 
+def is_dark():
+    mode = config["GUI"]["mode"]
+    return mode == "dark"
+
+
 if __name__ == "__main__":
     import pprint
     pprint.pprint(config)

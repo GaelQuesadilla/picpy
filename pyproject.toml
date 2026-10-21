@@ -6,7 +6,13 @@ build-backend = "hatchling.build"
 name = "picpy"
 source = "vcs"
 requires-python = ">=3.11"
-dependencies = ["pillow", "numpy", "ttkbootstrap", "loguru"]
+dependencies = [
+    "pillow",
+    "numpy",
+    "ttkbootstrap",
+    "loguru",
+    "tkinter-icons[material]",
+]
 
 authors = [{ name = "Gael Gonzalez Mendez", email = "gaelglz032@gmail.com" }]
 readme = "README.md"
