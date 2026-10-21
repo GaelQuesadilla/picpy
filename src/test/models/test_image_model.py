@@ -7,7 +7,7 @@ from PIL import UnidentifiedImageError
 
 
 image_path = Path("src/test/images")
-lena_path = image_path / "lena16.png"
+lena_path = image_path / "lena4.png"
 not_image_path = image_path / "not_image.png"
 absolutely_not_image_path = image_path / "absolutely_not_image.txt"
 

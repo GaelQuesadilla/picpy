@@ -1,19 +1,7 @@
 import pytest
 import numpy as np
-from PIL import Image
-from picpy.models.ImageModel import ImageModel
 from pathlib import Path
 from picpy.operations.pixel_operations import power, brightness, contrast, inverse, logarithmic, exponential
-
-image_path = Path("src/test/images")
-lena_path = image_path / "lena64.png"
-
-
-@pytest.fixture()
-def lena_model():
-    image = ImageModel()
-    image.load_image(lena_path)
-    return image
 
 
 class TestPrecision:
