@@ -52,6 +52,11 @@ class TkImage(ttk.Canvas):
         self.photo = self.model.get_current_as_pil()
         self._display_image()
 
+    def set_model(self, model: ImageModel):
+        self.model = model
+        self.model.add_listener(self._update_image)
+        self._update_image()
+
 
 if __name__ == "__main__":
     from picpy.views.globals.window import Window

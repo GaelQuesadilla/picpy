@@ -34,7 +34,7 @@ class ImageModel:
 
         self._original_image: np.ndarray | None = None
         self._history: Deque[np.ndarray] = deque(maxlen=5)
-
+        self.path: Path | str
         self._listeners: List[Callable[[], None]] = []
         self.add_listener(default_listener)
 
@@ -92,7 +92,7 @@ class ImageModel:
 
         if isinstance(path, Path):
             path = path.absolute()
-
+        self.path = path
         image = Image.open(path)
         image_array = np.asarray(image.convert("RGB"))
         self._history.clear()

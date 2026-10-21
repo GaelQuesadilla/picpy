@@ -44,6 +44,10 @@ class ToolBox(ttk.Frame):
             row, column = divmod(index, self.columns)
             button.grid(row=row, column=column, padx=2, pady=2)
 
+    def set_tools(self, values: List[Tool]):
+        self.tools = values
+        self._build_ui
+
     def _create_button(self, tool: Tool) -> ToolButton:
         if tool.icon_name is not None:
             return ToolIconButton(self, tool.icon_name, tool.action, tool.description)
